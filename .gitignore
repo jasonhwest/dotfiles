@@ -1,5 +1,15 @@
-# Compiled Python files
-*.pyc
+
+# working files
+.vim/viminfo
+.vim/swaps/*
+.vim/undo
+
+# git credential file
+.gitconfig.local
+
+
+# no thx
+node_modules
 
 # Folder view configuration files
 .DS_Store
@@ -12,3 +22,14 @@ Thumbs.db
 # Files that might appear on external disks
 .Spotlight-V100
 .Trashes
+
+# Compiled Python files
+*.pyc
+
+# fish shell
+fishd.*
+.config/fish/fish_history
+fish/fish_history
+
+# random
+shilocation
