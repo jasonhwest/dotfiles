@@ -1,3 +1,4 @@
+# This is Git's per-user configuration file.
 [alias]
 	c = commit -am
 	up = pull
@@ -67,7 +68,7 @@
 [url "git@gist.github.com:"]
 	pushInsteadOf = "gist:"
 	pushInsteadOf = "git://gist.github.com/"
-	
+
 [url "git://gist.github.com/"]
 	insteadOf = "gist:"
 
@@ -78,6 +79,7 @@
 # push easily. http://stackoverflow.com/a/23918418/89484
 [push]
 	default = current
+	# default = simple
 
 # use separate file for username / github token / etc
 [include]
@@ -95,3 +97,17 @@
 	prune = true
 [diff]
 	compactionHeuristic = true
+	tool = bcomp
+[difftool]
+	prompt = false
+[difftool "bcomp"]
+	trustExitCode =  true
+	cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE"
+[merge]
+	tool = bcomp
+[mergetool]
+	prompt = false
+	keepBackup = false
+[mergetool "bcomp"]
+	trustExitCode = true
+	cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE" "$BASE" "$MERGED"

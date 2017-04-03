@@ -7,7 +7,9 @@
 
 # Install native apps
 
-brew install caskroom/cask/brew-cask
+# you don't need to install brew-cask anymore, since it is now integrated in Homebrew
+# https://github.com/caskroom/homebrew-cask/issues/25095
+# brew install caskroom/cask/brew-cask
 # brew tap caskroom/versions
 
 # daily
@@ -20,7 +22,7 @@ brew cask install flux
 
 # dev
 brew cask install iterm2
-brew cask install sublime-text
+#brew cask install sublime-text
 brew cask install imagealpha
 brew cask install imageoptim
 

@@ -179,3 +179,72 @@ function code () { VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCodeInsiders" -
 shellswitch () {
 	chsh -s $(brew --prefix)/bin/$1
 }
+
+## Git
+# git code review - checkout remote branch locally so you can "see" all the pending changes
+gitcrgo() { git checkout develop; git fetch; git merge --no-commit --no-ff $1; }
+gitcrdone() { git merge --abort; }
+
+# my cr is done so let's wrap it up...
+gitmycrmerge() { git checkout develop; git pull origin develop; git merge --no-ff $1; }
+gitmycrpush() { git push; git push origin --delete $1; git branch -d $1; }
+
+prettyjson() { node -e "console.log(JSON.stringify(JSON.parse(require('fs').readFileSync(process.argv[1])), null, 4));" $1; }
+
+gitlatest() {
+	cdt;
+	git fetch;
+	git for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:red)%(objectname:short)%(color:reset);%(color:yellow)%(refname:short)%(color:reset);(%(color:green)%(committerdate:relative)%(color:reset));%(authorname);%(contents:subject)' | column -t -s ';'
+}
+
+gitch() {
+	cdt;
+	git fetch;
+	git log @{u}...HEAD --graph --decorate --left-right --boundary --pretty=format:'%Cred%h%Creset %d %s %Cgreen(%cr)%Creset %Cblue[%an]%Creset' --abbrev-commit --date=relative
+}
+
+gm() {
+  echo "Updating atom packages..."
+  apmup
+  cdt
+  branchname=$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)
+  git stash
+
+  echo
+  echo "Returning to develop branch for updates"
+  git checkout develop
+  gitch
+
+  echo
+  echo "Git branches and the last commit date for each branch"
+  gitlatest
+  cdt
+  git pull origin develop
+
+  echo
+  echo "Back to work on ${branchname}"
+  git checkout ${branchname}
+}
+
+wkup() {
+	cdt;
+	git rebase origin/develop;
+	git status
+}
+
+wkbd(){
+	cdt;
+	git stash pop;
+	cd master;
+	./gradlew eclipse;
+	cd ../static_resources;
+	/usr/local/bin/jbclean
+}
+
+wked(){
+  cdt;
+  nohup /Applications/Atom.app/Contents/MacOS/Atom>/dev/null&
+  nohup /Applications/DataGrip.app/Contents/MacOS/datagrip>/dev/null&
+  nohup /Applications/STS.app/Contents/MacOS/STS>/dev/null&
+  # nohup /Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea>/dev/null&
+}

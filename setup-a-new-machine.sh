@@ -151,15 +151,16 @@ bash < <( curl https://raw.github.com/jamiew/git-friendly/master/install.sh)
 
 
 # Type `git open` to open the GitHub page or website for a repository.
+# https://github.com/paulirish/git-open
 npm install -g git-open
 
-# fancy listing of recent branches
+# fancy listing of recent branches https://github.com/paulirish/git-recent
 npm install -g git-recent
 
-# sexy git diffs
+# sexy git diffs https://github.com/so-fancy/diff-so-fancy
 npm install -g diff-so-fancy
 
-# trash as the safe `rm` alternative
+# trash as the safe `rm` alternative https://github.com/sindresorhus/trash-cli
 npm install --global trash-cli
 
 # install better nanorc config
@@ -203,7 +204,7 @@ echo $BASH_VERSION # should be 4.x not the old 3.2.X
 
 
 # setting up the sublime symlink
-ln -sf "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" ~/bin/subl
+#ln -sf "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" ~/bin/subl
 
 
 ###

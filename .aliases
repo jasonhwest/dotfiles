@@ -34,6 +34,7 @@ export CLICOLOR_FORCE=1
 
 # ls options: A = include hidden (but not . or ..), F = put `/` after folders, h = byte unit suffixes
 alias ls='gls -AFh ${colorflag} --group-directories-first'
+alias ll='gls -lFGa ${colorflag} --group-directories-first'
 alias lsd='ls -l | grep "^d"' # only directories
 #    `la` defined in .functions
 ###
@@ -91,3 +92,19 @@ alias emptytrash=" \
 # Update installed Ruby gems, Homebrew, npm, and their installed packages
 alias brew_update="brew -v update; brew upgrade --force-bottle --cleanup; brew cleanup; brew cask cleanup; brew prune; brew doctor; npm-check -g -u"
 alias update_brew_npm_gem='brew_update; npm install npm -g; npm update -g; sudo gem update --system; sudo gem update --no-document'
+
+# Marcus
+alias jdk7="export JAVA_HOME=$JDK7"
+alias jdk8="export JAVA_HOME=$JDK8"
+alias cdt="cd $HOME/work/github/marcus && jdk7"
+alias cdp="cd $HOME/work/marcus/Jboss_EAP_6.1/standalone"
+alias jbmon="/usr/local/bin/lnav $HOME/work/marcus/Jboss_EAP_6.1/standalone/log/server.log"
+
+alias gd="git difftool $1"
+# alias gitlatest="cdt; git fetch; git for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:red)%(objectname:short)%(color:reset);%(color:yellow)%(refname:short)%(color:reset);(%(color:green)%(committerdate:relative)%(color:reset));%(authorname);%(contents:subject)' | column -t -s ';'"
+# alias gitch="cdt; git fetch; git log @{u}...HEAD --graph --decorate --left-right --boundary --pretty=format:'%Cred%h%Creset %d %s %Cgreen(%cr)%Creset %Cblue[%an]%Creset' --abbrev-commit --date=relative"
+alias gs="git status"
+alias gb="git branch -a"
+
+## Morning ritual
+alias apmup="apm upgrade --confirm=false"
