@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+gradlecompile='false'
+# https://stackoverflow.com/a/21128172/957079
+while getopts 'c' flag; do
+	case "${flag}" in
+		g) gradlecompile='true' ;;
+		?) printf '\nUsage: %s: [-g] run gradle eclipse\n' $0; exit 2 ;;
+		# *) error "Unexpected option ${flag}" ;;
+	esac
+done
+
+export JBOSS6_HOME=$HOME/work/marcus/Jboss_EAP_6.1
+cd $HOME/work/github/marcus
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_79.jdk/Contents/Home
+if [ '$gradlecompile' == 'true' ]
+then
+	cd ./master
+	./gradlew eclipse
+	cd ..
+fi
+nohup /Applications/STS.app/Contents/MacOS/STS>/dev/null&

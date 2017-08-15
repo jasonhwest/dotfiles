@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+export JBOSS6_HOME=$HOME/work/jboss-eap-6.1
+cd $HOME/work/github/marcus
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_79.jdk/Contents/Home
+cd master
+./gradlew eclipse
+nohup /Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea>/dev/null&
+

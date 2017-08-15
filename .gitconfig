@@ -6,25 +6,75 @@
 	s = status
 	sclone = clone --depth=1
 	co = checkout
-	df = diff --color --color-words --abbrev
-	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
+	bl = branch --list
 
-	# Show the diff between the latest commit and the current state
-	d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
+	# g what BRANCH..BRANCH
+	#     shows the files that were modified
+	what = diff --name-status
+
+	# g who FILENAME
+	#     shows hash/when/who/why for a file/folder
+	#     can also add -10 to limit to last 10 entries
+	who = log -10 --oneline --color --pretty=format:'%Cred%h%Creset %Cgreen(%cr) %C(bold blue)<%aN>%Creset%Creset %s %C(yellow)%d%Creset' --abbrev-commit
+
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset %Cgreen(%cr) %C(bold blue)<%aN>%Creset%C(yellow)%d%Creset %s' --abbrev-commit --
+	l10 = log --color -10 --pretty=format:'%Cred%h%Creset %Cgreen(%cr) %C(bold blue)<%aN>%Creset%Creset %s %C(yellow)%d%Creset' --abbrev-commit --
+
+	# 2966f53a9c\ WEBAPI-227 updated units tests (#507)\ [GitHub]
+	# 0       4       web_api/src/test/java/com/dw/marcus/mvc/controller/api/DispatcherControllerMvcTest.java
+	lf = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+
+	stats = shortlog -sn --since='1 weeks'
+	# See who last changed lines 5 through 10 of the buttons’ CSS:
+	# git blame -L5,10 _components.buttons.scss
+	recent = for-each-ref --count=10 --sort=-committerdate refs/heads/ --format="%(refname:short)"
+	# overview = log --all --since='1 weeks' --oneline --no-merges
+	overview = log --pretty="%h%x09%d%x09%aN%x09%ad%x09%s" --all --since='1 weeks' --no-merges
+	overview = log --pretty="%h%x09%aN%x09%ad%x09%s" --since='1 weeks' --no-merges
+	recap = log --all --oneline --no-merges --author=jason.west@nextraq.com
+	today = log --since=00:00:00 --all --no-merges --oneline --author=jason.west@nextraq.com
+	graph = log --graph --all --decorate --stat --date=iso
+	# Check Which Changes You’re About to Pull
+	# upstream = !"git log --oneline --no-merges ..origin/develop"
+	upstream = !"git log --pretty=\"%h%x09%aN%x09%ad%x09%s\" --no-merges ..origin/develop"
+	upstream-detail = !"git log --no-merges ..origin/develop"
+	# Review What You’re About to Push
+	local = "!f() { git log --oneline --no-merges origin/$1..HEAD }; f"
 
 	reup = rebase-update # depot_tools specific
+	showdt = "!f() { git difftool $1~1 $1; }; f"
+	showi = "!f() { git difftool --extcmd 'icdiff --highlight --line-numbers' $1~1 $1; }; f"
+
+	d = diff --color --color-words --abbrev
+	# Show the diff between the latest commit and the current state
+	df = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
+
+	# diff bcomp
+	dbc = difftool --extcmd 'bcomp'
+	# diff command line
+	dcl = difftool --extcmd 'icdiff --highlight --line-numbers | less --tabs=4 -RFX'
+
+	# show hash in bcomp
+	sbc = "!f() { git difftool $1~1 $1; }; f"
+	# show hash in command line
+	scl = "!f() { git difftool --extcmd 'icdiff --highlight --line-numbers' $1~1 $1 | less --tabs=4 -RFX; }; f"
+
+	dsf = "!f() { [ -z \"$GIT_PREFIX\" ] || cd \"$GIT_PREFIX\" && git diff --color \"$@\" | diff-so-fancy  | less --tabs=4 -RFX; }; f"
+[status]
+	showUntrackedFiles = all
 
 [core]
 	excludesfile = ~/.gitignore
 	attributesfile = ~/.gitattributes
+	autocrlf = input
 
-[pager]
+# [pager]
 	# insanely beautiful diffs ==> npm install -g diff-so-fancy
-	diff = diff-so-fancy | less --tabs=4 -RFX
-	show = diff-so-fancy | less --tabs=4 -RFX
+	# diff = diff-so-fancy | less --tabs=4 -RFX
+	# show = diff-so-fancy | less --tabs=4 -RFX
 
 [interactive]
-  # disabled until github.com/so-fancy/diff-so-fancy/pull/172 is resolved :(
+	# disabled until github.com/so-fancy/diff-so-fancy/pull/172 is resolved :(
 	# diffFilter = "diff-so-fancy"
 
 # so much color
@@ -56,11 +106,12 @@
 	tool = opendiff
 
 # rewrites of repo paths
-[url "git@github.com:"]
-	insteadOf = "https://github.com/"
-	pushInsteadOf = "github:"
-	pushInsteadOf = "git://github.com/"
-	pushInsteadOf = "https://github.com/"
+# comment out the following before `brew update`?
+# [url "git@github.com:"]
+# 	insteadOf = "https://github.com/"
+# 	pushInsteadOf = "github:"
+# 	pushInsteadOf = "git://github.com/"
+# 	pushInsteadOf = "https://github.com/"
 
 [url "git://github.com/"]
 	insteadOf = "github:"
@@ -83,7 +134,7 @@
 
 # use separate file for username / github token / etc
 [include]
-  path = ~/.gitconfig.local
+	path = ~/.gitconfig.local
 
 #[init]
 #	templatedir = ~/.git_template
@@ -96,18 +147,23 @@
 [fetch]
 	prune = true
 [diff]
-	compactionHeuristic = true
+	# compactionHeuristic = true
 	tool = bcomp
+	# tool = icdiff
 [difftool]
 	prompt = false
 [difftool "bcomp"]
-	trustExitCode =  true
-	cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE"
+	# trustExitCode =  true
+	cmd = "/usr/local/bin/bcomp" \"$LOCAL\" \"$REMOTE\"
+[difftool "icdiff"]
+	cmd = "/usr/local/bin/icdiff --line-numbers" "$LOCAL" "$REMOTE"
 [merge]
 	tool = bcomp
 [mergetool]
 	prompt = false
-	keepBackup = false
+	# keepBackup = false
 [mergetool "bcomp"]
 	trustExitCode = true
-	cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
+	cmd = "/usr/local/bin/bcomp" \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
+[pull]
+	rebase = true

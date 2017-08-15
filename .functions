@@ -203,6 +203,48 @@ gitch() {
 	git log @{u}...HEAD --graph --decorate --left-right --boundary --pretty=format:'%Cred%h%Creset %d %s %Cgreen(%cr)%Creset %Cblue[%an]%Creset' --abbrev-commit --date=relative
 }
 
+gmall() {
+	gm
+	if [ "no" == $(ask_yes_or_no "Continue?") ]
+	then
+		echo "Stopped after gm."
+		exit 0
+	fi
+
+	wkup
+	if [ "no" == $(ask_yes_or_no "Continue?") ]
+	then
+		echo "Stopped after wkup."
+		exit 0
+	fi
+
+	wkbd
+	if [ "no" == $(ask_yes_or_no "Continue?") ]
+	then
+		echo "Stopped after wkbd."
+		exit 0
+	fi
+
+	wked
+}
+
+# https://stackoverflow.com/a/1885534/957079
+# https://stackoverflow.com/a/17695543/957079
+function ask_yes_or_no() {
+	read -p "$1 ([y]es or [N]o): " -n 1 -r
+	echo    # (optional) move to a new line
+	if [[ $REPLY =~ ^[Yy]$ ]]
+	then
+		echo "yes";
+	else
+		echo "no";
+	fi
+	# case $(echo $REPLY | tr '[A-Z]' '[a-z]') in
+	# 	y|yes) echo "yes" ;;
+	# 	*)     echo "no" ;;
+	# esac
+}
+
 gm() {
   echo "Updating atom packages..."
   apmup
@@ -243,8 +285,61 @@ wkbd(){
 
 wked(){
   cdt;
-  nohup /Applications/Atom.app/Contents/MacOS/Atom>/dev/null&
+  # nohup /Applications/Atom.app/Contents/MacOS/Atom>/dev/null&
+  nohup /Applications/Atom\ Beta.app/Contents/MacOS/Atom\ Beta>/dev/null&
   nohup /Applications/DataGrip.app/Contents/MacOS/datagrip>/dev/null&
   nohup /Applications/STS.app/Contents/MacOS/STS>/dev/null&
   # nohup /Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea>/dev/null&
+}
+
+sts() {
+	gradlecompile='false'
+	# https://stackoverflow.com/a/21128172/957079
+	# Note: If a character is followed by a colon (e.g. f:),
+	#       that option is expected to have an argument.
+	while getopts 'g' flag; do
+		case "${flag}" in
+			g) gradlecompile='true' ;;
+			?) printf '\nUsage: %s: [-g] run gradle eclipse\n' $0; exit 2 ;;
+			# *) error "Unexpected option ${flag}" ;;
+		esac
+	done
+
+	export JBOSS6_HOME=$HOME/work/marcus/Jboss_EAP_6.1
+	cd $HOME/work/github/marcus
+	# export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_79.jdk/Contents/Home
+	export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home
+	if [ '$gradlecompile' == 'true' ]
+	then
+		cd ./master
+		./gradlew eclipse
+		cd ..
+	fi
+	cd static_resources
+	nohup /Applications/STS.app/Contents/MacOS/STS>/dev/null&
+}
+
+ntj() {
+	gradlecompile='false'
+	# https://stackoverflow.com/a/21128172/957079
+	while getopts 'g' flag; do
+		case "${flag}" in
+			g) gradlecompile='true' ;;
+			?) printf '\nUsage: %s: [-g] run gradle eclipse\n' $0; exit 2 ;;
+			# *) error "Unexpected option ${flag}" ;;
+		esac
+	done
+
+	export JBOSS6_HOME=$HOME/work/jboss-eap-6.1
+	cd $HOME/work/github/marcus
+	# export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_79.jdk/Contents/Home
+	export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home
+	if [ '$gradlecompile' == 'true' ]
+	then
+		cd master
+		./gradlew eclipse
+		cd ..
+	fi
+	cd static_resources
+	nohup /Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea>/dev/null&
 }

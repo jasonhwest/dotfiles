@@ -99,6 +99,7 @@ alias jdk8="export JAVA_HOME=$JDK8"
 alias cdt="cd $HOME/work/github/marcus && jdk7"
 alias cdp="cd $HOME/work/marcus/Jboss_EAP_6.1/standalone"
 alias jbmon="/usr/local/bin/lnav $HOME/work/marcus/Jboss_EAP_6.1/standalone/log/server.log"
+alias no_eclipse_build="cd $HOME/work/github/marcus; git apply $HOME/bd/nextraq/eclipseBuilders.patch"
 
 alias gd="git difftool $1"
 # alias gitlatest="cdt; git fetch; git for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:red)%(objectname:short)%(color:reset);%(color:yellow)%(refname:short)%(color:reset);(%(color:green)%(committerdate:relative)%(color:reset));%(authorname);%(contents:subject)' | column -t -s ';'"
