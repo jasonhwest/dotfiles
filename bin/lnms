@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -r
+set -u
+set -o pipefail
+
+docker compose exec librenms lnms "$@"
